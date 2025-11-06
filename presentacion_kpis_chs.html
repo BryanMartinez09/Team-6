@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuesta de Mejora - Comercial Hernández Sonsonate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: white;
+            padding: 50px 70px;
+            animation: slideIn 0.5s ease-out;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-header {
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .slide-title {
+            font-size: 2.5em;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .slide-subtitle {
+            font-size: 1.2em;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .slide-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 20px;
+        }
+
+        .portada {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .portada h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .portada .info {
+            font-size: 1.3em;
+            margin: 15px 0;
+            opacity: 0.95;
+        }
+
+        .portada .authors {
+            margin-top: 40px;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            line-height: 1.8;
+        }
+
+        li {
+            margin: 15px 0;
+            font-size: 1.05em;
+            color: #4a5568;
+        }
+
+        .highlight {
+            background: #fef5e7;
+            padding: 20px;
+            border-left: 5px solid #f39c12;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .stat-box {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 25px;
+            margin: 10px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .nav-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .bullet-point {
+            margin: 20px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .bullet-point:before {
+            content: "►";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        strong {
+            color: #667eea;
+        }
+
+        .conclusion-item {
+            background: #e8f4f8;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .recommendation-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .recommendation-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .critical-alert {
+            background: #fff3cd;
+            padding: 20px;
+            border-left: 5px solid #ffc107;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        /* Estilos para el Diagrama de Actividad */
+        .diagram-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 20px 0;
+        }
+
+        .diagram-container img {
+            max-width: 100%;
+            max-height: 70vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            background: white;
+            padding: 20px;
+        }
+
+        .diagram-description {
+            margin-top: 20px;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .diagram-description p {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Portada -->
+        <div class="slide active portada">
+            <h1>PROPUESTA DE MEJORA DEL FLUJO DE INVENTARIO Y TOMA DE DECISIONES DE COMPRA</h1>
+            <div class="info">Comercial Hernández Sonsonate</div>
+            <div class="info">Universidad Dr. Andrés Bello - Regional Sonsonate</div>
+            <div class="info">Sistemas de Información Gerencial</div>
+            <div class="authors">
+                <div>Brandon Oswaldo Patricio García</div>
+                <div>Bryan Alexander Berrio Martínez</div>
+                <div>Josué Fernando Sarabia Recinos</div>
+                <div>José Alfredo Valdés Vásquez</div>
+                <div>Rubén Alejandro Torres Sánchez</div>
+            </div>
+            <div class="info" style="margin-top: 40px;">Docente: Patricia Angélica Peraza Gómez</div>
+        </div>
+
+        <!-- Slide 2: Índice -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Índice</h2>
+            </div>
+            <div class="slide-content">
+                <ol style="font-size: 1.2em; line-height: 2.2;">
+                    <li>Introducción</li>
+                    <li>Planteamiento del Problema</li>
+                    <li>Objetivos</li>
+                    <li>Justificación</li>
+                    <li>Alcances y Delimitaciones</li>
+                    <li>Marco Referencial</li>
+                    <li>Análisis e Interpretación de Resultados</li>
+                    <li>Conclusiones</li>
+                    <li>Recomendaciones</li>
+                    <li>Presentación de la Propuesta</li>
+                    <li>Presupuesto</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 3: Introducción -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Introducción</h2>
+            </div>
+            <div class="slide-content">
+                <div class="bullet-point">
+                    <strong>Empresa:</strong> Comercial Hernández Sonsonate (CHS) - Distribución puerta a puerta
+                </div>
+                <div class="bullet-point">
+                    <strong>Problemática Identificada:</strong> Gestión ineficiente de inventarios y toma de decisiones de compra
+                </div>
+                <div class="highlight">
+                    <h3 style="color: #e74c3c; margin-bottom: 15px;">⚠️ Situación Crítica Identificada</h3>
+                    <strong>Stock Muerto:</strong> 96.3% de productos (263 de 273) sin movimiento en 60 días<br>
+                    <strong>DIO Extremo:</strong> 426 días de inventario (14 meses de stock)<br>
+                    <strong>Capital Inmovilizado:</strong> $431,074 USD<br>
+                    <strong>Precisión del Sistema:</strong> Solo 51% (vs 98% esperado)
+                </div>
+                <div class="bullet-point">
+                    <strong>Sistema Actual:</strong> Django implementado desde el 18 de febrero de 2025
+                </div>
+                <div class="bullet-point">
+                    <strong>Oportunidad:</strong> Datos valiosos disponibles pero no aprovechados para decisiones estratégicas
+                </div>
+                <div class="bullet-point">
+                    <strong>Solución Propuesta:</strong> Sistema de KPIs y dashboards integrados para optimizar flujo de inventario y decisiones de compra
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Planteamiento del Problema -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Planteamiento del Problema</h2>
+            </div>
+            <div class="slide-content">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Situación Problemática</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Procesos Manuales</h3>
+                        <p>Reportes estáticos en Excel y conteos físicos frecuentes consumen tiempo valioso del personal</p>
+                    </div>
+                    <div class="card">
+                        <h3>Falta de Indicadores</h3>
+                        <p>Ausencia de KPIs estandarizados dificulta medir la salud del inventario</p>
+                    </div>
+                    <div class="card">
+                        <h3>Decisiones Reactivas</h3>
+                        <p>Compras basadas en experiencia y urgencia, no en análisis predictivo de demanda</p>
+                    </div>
+                    <div class="card">
+                        <h3>Datos Desaprovechados</h3>
+                        <p>Sistema Django sin módulo de análisis e inteligencia de negocios</p>
+                    </div>
+                </div>
+                <div class="highlight" style="margin-top: 30px;">
+                    <strong>Pregunta de Investigación:</strong> ¿De qué manera la implementación de un sistema de KPIs y dashboards integrado puede mejorar la visibilidad del inventario y optimizar la toma de decisiones de compra?
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Objetivos -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Objetivos</h2>
+            </div>
+            <div class="slide-content">
+                <div class="highlight">
+                    <h3 style="color: #f39c12; margin-bottom: 15px;">Objetivo General</h3>
+                    <p style="font-size: 1.15em;">Diseñar y proponer un sistema integral de KPIs y dashboards interactivos, integrado al sistema Django de CHS, que permita optimizar la gestión del flujo de inventario y la toma de decisiones de compra.</p>
+                </div>
+                <h3 style="color: #667eea; margin: 30px 0 20px 0;">Objetivos Específicos</h3>
+                <ol style="line-height: 2;">
+                    <li>Identificar y definir un conjunto de <strong>al menos 10 KPIs críticos</strong> para la gestión de inventario, compras y desempeño de vendedores</li>
+                    <li>Diseñar <strong>prototipos de dashboards interactivos</strong> para diferentes perfiles de usuario (ejecutivo, operativo de compras y vendedores)</li>
+                    <li>Proponer la <strong>arquitectura técnica</strong> y herramientas de Business Intelligence (Metabase o Grafana) para integración con Django</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Slide 6: Justificación -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Justificación</h2>
+            </div>
+            <div class="slide-content">
+                <div class="bullet-point">
+                    La gestión eficiente del inventario es <strong>crítica para la supervivencia y rentabilidad</strong> de un distribuidor puerta a puerta
+                </div>
+                <h3 style="color: #667eea; margin: 30px 0 20px 0;">Beneficios Esperados</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>💰 Liberación de Capital</h3>
+                        <div class="stat-box">$150K - $200K</div>
+                        <p>Liquidación de stock muerto liberaría hasta 46% del capital inmovilizado ($431K)</p>
+                    </div>
+                    <div class="card">
+                        <h3>📈 Reducción DIO</h3>
+                        <div class="stat-box">426 → 120 días</div>
+                        <p>Meta: reducir días de inventario a niveles manejables en 6 meses</p>
+                    </div>
+                    <div class="card">
+                        <h3>⚡ Mejora en Precisión</h3>
+                        <div class="stat-box">51% → 98%</div>
+                        <p>Auditoría y conteos cíclicos alcanzarían estándar de precisión</p>
+                    </div>
+                    <div class="card">
+                        <h3>🎯 Reducción Stock Muerto</h3>
+                        <div class="stat-box">96.3% → 15%</div>
+                        <p>De 263 a menos de 40 productos sin movimiento en 60 días</p>
+                    </div>
+                </div>
+                <div class="critical-alert" style="margin-top: 30px;">
+                    <strong>⚠️ Situación Actual:</strong> Con $431K en inventario y 96.3% de productos sin movimiento, CHS enfrenta una crisis de liquidez. La implementación de este sistema no es una mejora opcional, es una necesidad de supervivencia empresarial.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Alcances y Delimitaciones -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Alcances y Delimitaciones</h2>
+            </div>
+            <div class="slide-content">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Alcance</h3>
+                <ul>
+                    <li>Análisis exhaustivo de datos históricos desde el <strong>18 de febrero al 5 de septiembre de 2025</strong></li>
+                    <li>Definición y documentación de <strong>8-12 KPIs prioritarios</strong></li>
+                    <li>Diseño de prototipos funcionales de dashboards con recomendaciones técnicas</li>
+                </ul>
+                <h3 style="color: #667eea; margin: 30px 0 20px 0;">Delimitaciones</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>Tiempo</h3>
+                        <p>Periodo: 18/02/2025 - 05/09/2025. La implementación física queda fuera del alcance</p>
+                    </div>
+                    <div class="card">
+                        <h3>Espacio</h3>
+                        <p>Solo operaciones en Sonsonate Centro</p>
+                    </div>
+                    <div class="card">
+                        <h3>Recursos</h3>
+                        <p>Datos de PostgreSQL/MySQL. Herramientas BI de código abierto</p>
+                    </div>
+                    <div class="card">
+                        <h3>Limitaciones</h3>
+                        <p>Calidad dependiente de integridad de datos registrados</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Marco Referencial -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Marco Referencial</h2>
+            </div>
+            <div class="slide-content">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Conceptos Clave</h3>
+                <div class="bullet-point">
+                    <strong>Gestión de Inventarios:</strong> Proceso de seguimiento de productos para satisfacer demanda, evitando agotamiento y exceso de stock
+                </div>
+                <div class="bullet-point">
+                    <strong>Análisis ABC:</strong> Clasifica inventario en categorías A (más vendidos), B (importancia media) y C (menos importantes)
+                </div>
+                <h3 style="color: #667eea; margin: 30px 0 20px 0;">KPIs Propuestos</h3>
+                <table>
+                    <tr>
+                        <th>KPI</th>
+                        <th>Fórmula</th>
+                        <th>Propósito</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Rotación de Inventario</strong></td>
+                        <td>Costo Ventas / Inventario Promedio</td>
+                        <td>Eficiencia en renovación de existencias</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Días de Inventario (DIO)</strong></td>
+                        <td>(Inventario Promedio / Costo Ventas) × 365</td>
+                        <td>Días promedio en bodega antes de venta</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Precisión de Inventario</strong></td>
+                        <td>(Inv. Contable / Inv. Físico) × 100</td>
+                        <td>Confiabilidad de registros del sistema</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stock Muerto</strong></td>
+                        <td>(Stock Sin Movimiento / Stock Total) × 100</td>
+                        <td>Capital inmovilizado en productos obsoletos</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 9: Análisis e Interpretación de Resultados -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Análisis e Interpretación de Resultados</h2>
+            </div>
+            <div class="slide-content">
+                <div class="highlight">
+                    <strong>Período Analizado:</strong> 18-02-2025 al 05-09-2025<br>
+                    <strong>Datos del Sistema:</strong> 273 productos activos | 8,320 unidades vendidas | $431,074 en inventario
+                </div>
+                <h3 style="color: #667eea; margin: 30px 0 20px 0;">Resultados de KPIs Calculados</h3>
+                <table>
+                    <tr>
+                        <th>KPI</th>
+                        <th>Resultado</th>
+                        <th>Interpretación</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Rotación Anualizada</strong></td>
+                        <td>11.3K veces</td>
+                        <td>Rotación muy alta, indicando buena renovación de inventario</td>
+                    </tr>
+                    <tr>
+                        <td><strong>DIO (Días de Inventario)</strong></td>
+                        <td>426 días</td>
+                        <td>Capital inmovilizado críticamente alto. Requiere acción inmediata</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Precisión de Inventario</strong></td>
+                        <td>51% (510/1000)</td>
+                        <td style="color: #e74c3c; font-weight: bold;">Crítico: Muy por debajo del 98% necesario</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stock Muerto (60 días)</strong></td>
+                        <td style="color: #e74c3c; font-weight: bold;">96.3%</td>
+                        <td>Alarmante: 263 de 273 productos sin movimiento en 60 días</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Valor Stock Total</strong></td>
+                        <td>$431,074</td>
+                        <td>Capital total inmovilizado en inventario</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stock Promedio</strong></td>
+                        <td>9 unidades</td>
+                        <td>Nivel promedio por producto en bodega</td>
+                    </tr>
+                </table>
+                <h3 style="color: #667eea; margin: 30px 0 20px 0;">Clasificación ABC en Ventas</h3>
+                <div class="grid-2">
+                    <div class="stat-box" style="background: #27ae60;">Categoría A (Alta): 512 productos</div>
+                    <div class="stat-box" style="background: #f39c12;">Categoría B (Media): Distribución intermedia</div>
+                </div>
+                <div class="stat-box" style="background: #e74c3c; margin-top: 10px; display: block; text-align: center;">Categoría C (Baja): 128 productos con mínima rotación</div>
+                <div class="critical-alert" style="margin-top: 20px;">
+                    <strong>⚠️ Hallazgo Crítico:</strong> El 96.3% de productos sin movimiento en 60 días y un DIO de 426 días evidencian una crisis severa de liquidez. Se requiere acción correctiva inmediata.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Conclusiones -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Conclusiones</h2>
+            </div>
+            <div class="slide-content">
+                <div class="conclusion-item">
+                    <strong>1.</strong> El análisis cuantitativo confirma una situación <strong>crítica</strong>: con un DIO de 426 días y 96.3% de stock muerto, CHS tiene comprometido más de $400K en inventario que no genera flujo de caja, representando un riesgo financiero significativo.
+                </div>
+                <div class="conclusion-item">
+                    <strong>2.</strong> La precisión de inventario del 51% (vs 98% esperado) invalida la confiabilidad del sistema actual, haciendo imposible una gestión basada en datos sin antes corregir los registros físicos vs contables.
+                </div>
+                <div class="conclusion-item">
+                    <strong>3.</strong> La clasificación ABC revela que solo 512 productos (categoría A) impulsan la mayoría de ventas, mientras 263 productos (96.3%) no han tenido movimiento en 60 días, confirmando la necesidad urgente de liquidación estratégica.
+                </div>
+                <div class="conclusion-item">
+                    <strong>4.</strong> A pesar de la rotación anualizada alta (11.3K), el DIO extremadamente elevado indica que existen <strong>cuellos de botella severos</strong> en categorías específicas que inmovilizan capital, requiriendo análisis granular por producto.
+                </div>
+                <div class="conclusion-item">
+                    <strong>5.</strong> La infraestructura tecnológica Django está generando datos valiosos, pero sin dashboards de visualización y alertas automatizadas, la gerencia opera "a ciegas" ante una crisis de liquidez evidente.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Recomendaciones -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Recomendaciones</h2>
+            </div>
+            <div class="slide-content">
+                <div class="recommendation-card">
+                    <h3>1️⃣ URGENTE: Auditoría Física Completa de Inventario</h3>
+                    <p><strong>Prioridad Máxima:</strong> Con solo 51% de precisión, el primer paso crítico es realizar un conteo físico exhaustivo de las 4 bodegas para reconciliar el sistema. Sin datos confiables, cualquier decisión será errónea. Plazo: 2 semanas.</p>
+                </div>
+                <div class="recommendation-card">
+                    <h3>2️⃣ Plan de Liquidación Inmediata de Stock Muerto</h3>
+                    <p>Los 263 productos (96.3%) sin movimiento en 60 días deben liquidarse a través de promociones agresivas, descuentos de 30-50%, o donaciones con beneficio fiscal. Objetivo: liberar al menos $150K en 90 días.</p>
+                </div>
+                <div class="recommendation-card">
+                    <h3>3️⃣ Implementar Dashboards de Alerta Temprana</h3>
+                    <p>Conectar Metabase/Grafana AHORA para visualizar en tiempo real el DIO por producto y categoría. Establecer alertas automáticas cuando productos superen 30 días sin movimiento.</p>
+                </div>
+                <div class="recommendation-card">
+                    <h3>4️⃣ Congelamiento Inmediato de Compras Categoría C</h3>
+                    <p>Suspender toda orden de compra para los 263 productos muertos hasta completar su liquidación. Renegociar con proveedores términos de consignación para estos ítems.</p>
+                </div>
+                <div class="recommendation-card">
+                    <h3>5️⃣ Focalizar Recursos en Productos Categoría A</h3>
+                    <p>Los 512 productos de alta rotación deben tener stock garantizado. Implementar modelo de reorden automático (ROP) basado en velocidad de venta de últimos 30 días para evitar quiebres.</p>
+                </div>
+                <div class="recommendation-card">
+                    <h3>6️⃣ Análisis Profundo del DIO Extremo (426 días)</h3>
+                    <p>Un DIO de 426 días es <strong>14 meses de inventario</strong>. Realizar análisis por bodega y categoría para identificar los "tanques" específicos que están generando esta métrica alarmante.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Presentación de la Propuesta -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Presentación de la Propuesta</h2>
+            </div>
+            <div class="slide-content">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Sistema Integral de KPIs y Dashboards</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h3>🎯 Componentes Técnicos</h3>
+                        <ul>
+                            <li>Sistema Base: Django + PostgreSQL</li>
+                            <li>Herramienta BI: Metabase/Grafana</li>
+                            <li>Conexión: Solo lectura a BD</li>
+                            <li>Scripts SQL automatizados</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>📊 Dashboards Propuestos</h3>
+                        <ul>
+                            <li>Dashboard Ejecutivo</li>
+                            <li>Dashboard de Compras</li>
+                            <li>Dashboard de Vendedores</li>
+                            <li>Dashboard de Inventario</li>
+                        </ul>
+                    </div>
+                </div>
+                <h3 style="color: #667eea; margin: 30px 0 20px 0;">Impacto Esperado</h3>
+                <div class="grid-2">
+                    <div class="stat-box" style="background: #27ae60;">Liberación Capital: $150K-$200K</div>
+                    <div class="stat-box" style="background: #27ae60;">Reducción DIO: 426 → 120 días</div>
+                    <div class="stat-box" style="background: #3498db;">Stock Muerto: 96.3% → 15%</div>
+                    <div class="stat-box" style="background: #9b59b6;">Precisión: 51% → 98%</div>
+                </div>
+                <div class="highlight" style="margin-top: 30px;">
+                    <strong>Situación Actual Crítica:</strong> Los datos reales revelan que CHS tiene $431,074 en inventario con 263 productos (96.3%) sin movimiento en 60 días y un DIO de 426 días. Esta propuesta no es una optimización, es un plan de rescate financiero urgente.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Presupuesto -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Presupuesto</h2>
+            </div>
+            <div class="slide-content">
+                <table>
+                    <tr>
+                        <th>Concepto</th>
+                        <th style="text-align: right;">Monto (USD)</th>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="background: #e9ecef; font-weight: bold;">HONORARIOS PROFESIONALES</td>
+                    </tr>
+                    <tr>
+                        <td>Investigador Principal (2 meses)</td>
+                        <td style="text-align: right;">$400.00</td>
+                    </tr>
+                    <tr>
+                        <td>Analista de Datos (Consultoría)</td>
+                        <td style="text-align: right;">$200.00</td>
+                    </tr>
+                    <tr>
+                        <td>Diseñador de Dashboards (Freelance)</td>
+                        <td style="text-align: right;">$200.00</td>
+                    </tr>
+                    <tr style="background: #f8f9fa; font-weight: bold;">
+                        <td>Subtotal Honorarios</td>
+                        <td style="text-align: right;">$800.00</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="background: #e9ecef; font-weight: bold;">EQUIPAMIENTO Y SOFTWARE</td>
+                    </tr>
+                    <tr>
+                        <td>Licencias temporales de software estadístico</td>
+                        <td style="text-align: right;">$75.00</td>
+                    </tr>
+                    <tr>
+                        <td>Servidor cloud para pruebas (2 meses - Digital Ocean/AWS)</td>
+                        <td style="text-align: right;">$50.00</td>
+                    </tr>
+                    <tr>
+                        <td>Herramientas de BI (Metabase Cloud - opcional)</td>
+                        <td style="text-align: right;">$0.00</td>
+                    </tr>
+                    <tr style="background: #f8f9fa; font-weight: bold;">
+                        <td>Subtotal Equipamiento</td>
+                        <td style="text-align: right;">$125.00</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="background: #e9ecef; font-weight: bold;">TRANSPORTE Y ALIMENTACIÓN</td>
+                    </tr>
+                    <tr>
+                        <td>Visitas a CHS en Sonsonate (8 visitas estimadas)</td>
+                        <td style="text-align: right;">$70.00</td>
+                    </tr>
+                    <tr>
+                        <td>Transporte local (reuniones y asesorías)</td>
+                        <td style="text-align: right;">$30.00</td>
+                    </tr>
+                    <tr>
+                        <td>Alimentación durante visitas de campo (8 días)</td>
+                        <td style="text-align: right;">$90.00</td>
+                    </tr>
+                    <tr style="background: #f8f9fa; font-weight: bold;">
+                        <td>Subtotal Transporte y Alimentación</td>
+                        <td style="text-align: right;">$190.00</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="background: #e9ecef; font-weight: bold;">CONTINGENCIA</td>
+                    </tr>
+                    <tr>
+                        <td>Imprevistos y gastos adicionales (10%)</td>
+                        <td style="text-align: right;">$137.00</td>
+                    </tr>
+                    <tr style="background: #667eea; color: white; font-size: 1.3em; font-weight: bold;">
+                        <td>INVERSIÓN TOTAL DEL PROYECTO</td>
+                        <td style="text-align: right;">$1,277.00</td>
+                    </tr>
+                </table>
+                <div class="critical-alert" style="margin-top: 30px;">
+                    <strong>ROI Esperado:</strong> Con una inversión de $1,277, se proyecta liberar entre $150K-$200K en capital inmovilizado, generando un retorno de inversión superior al 11,700% en los primeros 6 meses.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Diagrama de Actividad -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Diagrama de Actividad del Sistema</h2>
+                <p class="slide-subtitle">Flujo de Procesos del Sistema de KPIs Propuesto</p>
+            </div>
+            <div class="slide-content">
+                <div class="diagram-container">
+                    <!-- 
+                        INSTRUCCIONES PARA AGREGAR LA IMAGEN:
+                        
+                        1. Reemplaza la línea que dice:
+                           <img src="RUTA_DE_TU_IMAGEN.png" alt="Diagrama de Actividad">
+                        
+                        2. Cambia "RUTA_DE_TU_IMAGEN.png" por:
+                           - Ruta local: "diagrama-actividad.png" (si está en la misma carpeta)
+                           - Ruta URL: "https://tu-servidor.com/imagen.png"
+                           - Ruta relativa: "./images/diagrama-actividad.png"
+                        
+                        3. La imagen se ajustará automáticamente al espacio disponible
+                        
+                        Ejemplo:
+                        <img src="diagrama-actividad.png" alt="Diagrama de Actividad">
+                    -->
+                    <img src="image.png" alt="Diagrama de Actividad del Sistema de KPIs">
+                    
+                    <div class="diagram-description">
+                        <h3 style="color: #667eea; margin-top: 20px;">Descripción del Flujo</h3>
+                        <p>El diagrama muestra el proceso completo desde la captura de datos en el sistema Django hasta la generación de alertas y toma de decisiones basada en los KPIs definidos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide Final: Cierre -->
+        <div class="slide portada">
+            <h1 style="font-size: 2.5em;">¡Gracias por su atención!</h1>
+            <div class="info" style="font-size: 1.5em; margin-top: 40px;">
+                Propuesta de Mejora del Flujo de Inventario
+            </div>
+            <div class="info" style="font-size: 1.3em;">
+                Comercial Hernández Sonsonate
+            </div>
+            <div style="margin-top: 60px; font-size: 1.2em;">
+                <p>¿Preguntas y Comentarios?</p>
+            </div>
+            <div style="margin-top: 40px; font-size: 1em; opacity: 0.9;">
+                Universidad Dr. Andrés Bello - Regional Sonsonate<br>
+                Sistemas de Información Gerencial
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="currentSlide">1</span> / <span id="totalSlides">15</span>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">◄ Anterior</button>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Siguiente ►</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            
+            if (n >= totalSlides) {
+                currentSlide = totalSlides - 1;
+            } else if (n < 0) {
+                currentSlide = 0;
+            } else {
+                currentSlide = n;
+            }
+            
+            slides[currentSlide].classList.add('active');
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowLeft') {
+                changeSlide(-1);
+            } else if (event.key === 'ArrowRight' || event.key === ' ') {
+                event.preventDefault();
+                changeSlide(1);
+            } else if (event.key === 'Home') {
+                showSlide(0);
+            } else if (event.key === 'End') {
+                showSlide(totalSlides - 1);
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(event) {
+            touchStartX = event.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(event) {
+            touchEndX = event.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                changeSlide(1);
+            }
+            if (touchEndX > touchStartX + 50) {
+                changeSlide(-1);
+            }
+        }
+
+        // Prevent scroll on space key
+        window.addEventListener("keydown", function(e) {
+            if(e.code === "Space" && e.target === document.body) {
+                e.preventDefault();
+            }
+        }, false);
+    </script>
+</body>
+</html>
